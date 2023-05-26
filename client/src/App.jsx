@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./scenes/homePage";
 import LoginPage from "./scenes/loginPage";
 import ProfilePage from "./scenes/profilePage";
-import { useSelector } from "react-redux";
-import { useMemo } from "react";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { themeSettings } from "./theme";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 function App() {

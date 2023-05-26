@@ -1,4 +1,6 @@
-import { useState } from "react";
+import FlexBetween from "../../components/FlexBetween";
+import { setLogin } from "../../state";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   Box,
   Button,
@@ -7,14 +9,12 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import * as yup from "yup";
+import { Formik } from "formik";
+import { useState } from "react";
+import Dropzone from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Formik } from "formik";
-import { setLogin } from "../../state";
-import Dropzone from "react-dropzone";
-import FlexBetween from "../../components/FlexBetween";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import * as yup from "yup";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
