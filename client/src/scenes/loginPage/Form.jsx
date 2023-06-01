@@ -47,7 +47,7 @@ const initialValuesLogin = {
 };
 
 const Form = () => {
-  const [pageType, setPageType] = useState("register");
+  const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -64,7 +64,11 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
 
     const url = `${import.meta.env.VITE_API_URL}/auth/register`;
-    const savedUser = await post(url, token, formData);
+    const savedUserResponse = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    const savedUser = await savedUserResponse.json();
 
     onSubmitProps.resetForm();
 
@@ -75,7 +79,12 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     const url = `${import.meta.env.VITE_API_URL}/auth/login`;
-    const loggedIn = await post(url, token, JSON.stringify(values));
+    const loggedInResponse = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+    const loggedIn = await loggedInResponse.json();
 
     onSubmitProps.resetForm();
     if (loggedIn) {

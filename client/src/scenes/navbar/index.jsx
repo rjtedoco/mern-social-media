@@ -28,9 +28,9 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMenuMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  // const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const navigate = useNavigate();
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -39,8 +39,12 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  // const fullName = `${user.firstName} ${user.lastname}`;
-  const fullName = "R-Jay Tedoco";
+  const fullName = `${user.firstName} ${user.lastname}`;
+
+  const logout = async () => {
+    dispatch(setLogout());
+    navigate("");
+  };
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -57,7 +61,7 @@ const Navbar = () => {
             },
           }}
         >
-          Sociopedia
+          Socialize
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
@@ -108,7 +112,7 @@ const Navbar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout)}>Log Out</MenuItem>
+              <MenuItem onClick={logout}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -183,7 +187,7 @@ const Navbar = () => {
                 <MenuItem value={fullName}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout)}>Log Out</MenuItem>
+                <MenuItem onClick={logout}>Log Out</MenuItem>
               </Select>
             </FormControl>
           </FlexBetween>
