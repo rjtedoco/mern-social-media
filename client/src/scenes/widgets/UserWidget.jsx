@@ -5,6 +5,7 @@ import {
   WorkOutlineOutlined,
 } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
+import { get } from "@utils/api";
 import FlexBetween from "components/FlexBetween";
 import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -23,15 +24,8 @@ const UserWidget = ({ userId, picturePath }) => {
   const main = palette.neutral.main;
 
   const getUser = useCallback(async () => {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/users/${userId}`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-
-    const data = await response.json();
+    const url = `${import.meta.env.VITE_API_URL}/users/${userId}`;
+    const data = await get(url, token);
     setUser(data);
   }, [token, userId]);
 

@@ -21,6 +21,7 @@ export default defineConfig({
       components: "/src/components",
       "@scenes": "/src/scenes",
       "@state": "/src/state",
+      "@utils": "/src/utils",
     },
   },
 });

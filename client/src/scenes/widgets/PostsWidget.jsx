@@ -1,3 +1,4 @@
+import { get } from "../../utils/api";
 import PostWidget from "./PostWidget";
 import { setPosts } from "@state";
 import { useEffect } from "react";
@@ -8,32 +9,31 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
 
-  const getPosts = async () => {
-    const response = await fetch("http://localhost:3001/posts", {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const data = await response.json();
+  const fetchPosts = async () => {
+    const url = `${import.meta.env.VITE_API_URL}/posts`;
+    const data = await get(url, token);
     dispatch(setPosts({ posts: data }));
   };
 
-  const getUserPosts = async () => {
-    const response = await fetch(`http://localhost:3001/posts/${userId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
+  const fetchUserPosts = async () => {
+    const url = `${import.meta.env.VITE_API_URL}/posts/${userId}`;
+    const data = await get(url, token);
     dispatch(setPosts({ posts: data }));
   };
 
   useEffect(() => {
     if (isProfile) {
-      getUserPosts();
+      fetchUserPosts();
     } else {
-      getPosts();
+      fetchPosts();
     }
   }, []);
+
+  function isEmptyObject(obj) {
+    return obj && Object.keys(obj).length === 0 && obj.constructor === Object;
+  }
+
+  if (posts === undefined || !posts || isEmptyObject(posts)) return;
 
   return (
     <>

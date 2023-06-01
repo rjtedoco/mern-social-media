@@ -1,5 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { setFriends } from "@state";
+import { get } from "@utils/api";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect } from "react";
@@ -11,23 +12,14 @@ const FriendListWidget = ({ userId }) => {
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
 
-  const getFriends = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${userId}/friends`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data = await response.json();
+  const fetchFriends = async () => {
+    const url = `${import.meta.env.VITE_API_URL}/users/${userId}/friends`;
+    const data = await get(url, token);
     dispatch(setFriends({ friends: data }));
   };
 
   useEffect(() => {
-    getFriends();
+    fetchFriends();
   }, []);
 
   console.log(friends);

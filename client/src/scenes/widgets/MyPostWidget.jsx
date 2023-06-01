@@ -19,6 +19,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { setPosts } from "@state";
+import { post } from "@utils/api";
 import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
@@ -29,7 +30,7 @@ const MyPostWidget = ({ picturePath }) => {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
-  const [post, setPost] = useState("");
+  const [myPost, setMyPost] = useState("");
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
@@ -39,23 +40,19 @@ const MyPostWidget = ({ picturePath }) => {
 
   const handlePost = async () => {
     const formData = new FormData();
-    console.log(import.meta.env.VITE_APP_URL);
     formData.append("userId", _id);
-    formData.append("description", post);
+    formData.append("description", myPost);
+
     if (image) {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
     }
 
-    const response = await fetch(`http://localhost:3001/posts`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const posts = await response.json();
+    const url = `${import.meta.env.VITE_API_URL}/posts`;
+    const posts = await post(url, token, formData);
     dispatch(setPosts({ posts }));
     setImage(null);
-    setPost("");
+    setMyPost("");
   };
 
   return (
@@ -64,8 +61,8 @@ const MyPostWidget = ({ picturePath }) => {
         <UserImage image={picturePath} />
         <InputBase
           placeholder="What's on your mind?"
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
+          onChange={(e) => setMyPost(e.target.value)}
+          value={myPost}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -161,7 +158,7 @@ const MyPostWidget = ({ picturePath }) => {
         )}
 
         <Button
-          disabled={!post}
+          disabled={!myPost}
           onClick={handlePost}
           sx={{
             color: palette.background.alt,
